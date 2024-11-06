@@ -31,7 +31,7 @@ To create an account in github, see [GitHub Account](https://github.com/)
 
 - Jenkins
 - Tomcat
-- Docker:
+- Docker
 - SonarQube (as a Container)
 - Nexus (as a Container)
 
@@ -39,12 +39,12 @@ To create an account in github, see [GitHub Account](https://github.com/)
 
 - GitHub (git) = SCMT  
 - Jenkins = (CICD)
-- Maven = Build/package 'Java applications'
-- Sonarqube = scan codes
+- Maven = Build/Package 'Java applications'
+- Sonarqube = Scan Codes
 - Nexus = Backup our build artifact (optional)
-- Tomcat = (to host our application)
-- Docker:
-- DockerHub = to backup our images  
+- Tomcat = To host our application
+- Docker = For containerization
+- DockerHub = To backup our images  
 
 ## CICD Jenkins Integration
 
@@ -180,6 +180,8 @@ Configure pom.xml:
 - Go to the pom.xml in your project
 - Search for the `<distributionManagement>` tag
 - It will look something like this:
+
+![nexus1](image.png)
 
  ```python
  <distributionManagement>
