@@ -70,7 +70,7 @@ Also, make sure to put off your master node (Buil-In Node) for this can be a sec
 - Usage: `Only build jobs with label expressions matching this node`
 - Now click `Save`
 
-## Setting up a VM agent
+## Setting up a VM agent [an instance]
 
 ### Pre-requisite
 
