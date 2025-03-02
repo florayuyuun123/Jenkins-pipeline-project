@@ -13,14 +13,14 @@ This sample Jenkinsfile is expected to archive the following:
 
 ```python
 pipeline {
-    agent { label 'wls-agent' }  // Replace 'wsl-agent' with the label of your agent
+    agent { label 'Agent1' }  // Replace 'wsl-agent' with the label of your agent
 
     environment {
-        GITHUB_REPO_URL = 'https://github.com/vlonje20/vin-tour-ph.git'
+        GITHUB_REPO_URL = 'https://github.com/florayuyuun123/Jenkins-pipeline-project.git'
         BRANCH_NAME = 'main'  // Replace with your branch name if it's not 'main'
-        GITHUB_CREDENTIALS_ID = 'vin_github_cred'  // Replace with your Jenkins GitHub credentials ID
+        GITHUB_CREDENTIALS_ID = 'jenkins-github-creds'  // Replace with your Jenkins GitHub credentials ID
         DOCKERHUB_CREDENTIALS_ID = 'jenkins-docker-cred'  // Replace with your Jenkins Docker Hub credentials ID
-        DOCKERHUB_REPO = 'vlonje20/vin-tour-ph'  // Replace with your Docker Hub repository
+        DOCKERHUB_REPO = 'yuyuun/jenkins-pipeline'  // Replace with your Docker Hub repository
     }
 
     stages {
@@ -68,7 +68,7 @@ pipeline {
         stage('Run Docker Container') {
             steps {
                 script {
-                    sh "docker run --name vin-tour-ph-con --rm -d -p 8000:8080 ${env.DOCKERHUB_REPO}:latest"  // Run Docker container in detached mode
+                    sh "docker run --name yuyuun-jenkins-pipeline-con --rm -d -p 8000:8080 ${env.DOCKERHUB_REPO}:latest"  // Run Docker container in detached mode
                 }
             }
         }
