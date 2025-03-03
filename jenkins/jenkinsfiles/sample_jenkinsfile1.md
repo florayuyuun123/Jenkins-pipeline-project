@@ -30,18 +30,10 @@ pipeline {
             }
         }
 
-        stage('Check for Required Files') {
+        stage('Check for pom.xml') {
             steps {
                 sh 'ls -la'  // List files to verify repo cloned correctly
                 sh 'find . -name "pom.xml"'  // Ensure pom.xml exists
-                sh '''
-                if [ ! -f Dockerfile ]; then
-                    echo "❌ ERROR: Dockerfile is missing!"
-                    exit 1
-                else
-                    echo "✅ Dockerfile exists."
-                fi
-                '''
             }
         }
 
