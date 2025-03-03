@@ -11,12 +11,12 @@ This sample Jenkinsfile is expected to archive the following:
 
 ```python
 pipeline {
-    agent { label 'wls-agent' }  // Replace 'wsl-agent' with the label of your agent
+    agent { label 'Agent1' }  // Replace 'wsl-agent' with the label of your agent
 
     environment {
-        GITHUB_REPO_URL = 'https://github.com/vlonje20/vin-movies.git'
+        GITHUB_REPO_URL = 'https://github.com/florayuyuun123/Jenkins-pipeline-project.git'
         BRANCH_NAME = 'main'  // Replace with your branch name if it's not 'main'
-        CREDENTIALS_ID = 'vin_github_cred'  // Replace with your Jenkins credentials ID
+        CREDENTIALS_ID = 'jenkins-github-creds'  // Replace with your Jenkins credentials ID
     }
 
     stages {
@@ -44,7 +44,7 @@ pipeline {
             steps {
                 script {
                     sh 'docker --version'  // Verify Docker installation
-                    sh 'docker build -t vin-movies-image .'  // Build Docker image
+                    sh 'docker build -t flo-movies-image .'  // Build Docker image
                 }
             }
         }
@@ -52,7 +52,7 @@ pipeline {
         stage('Run Docker Container') {
             steps {
                 script {
-                    sh 'docker run --name vin-movies-new --rm -d -p 8008:8080 vin-movies-image'  // Run Docker container in detached mode
+                    sh 'docker run --name flo-movies-new --rm -d -p 8008:8080 flo-movies-image'  // Run Docker container in detached mode
                 }
             }
         }
