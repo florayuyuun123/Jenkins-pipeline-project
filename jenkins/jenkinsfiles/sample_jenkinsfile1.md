@@ -1,58 +1,58 @@
-# Tested and working
+// Tested and working
 
-This sample Jenkinsfile is expected to archive the following:
-
-- Clone your `gitHub repository url`
-- Build the code with the `'mvn clean package'` goal
-- Build a `docker image` from the `war file`
-- Then run a `docker container`
+// This sample Jenkinsfile is expected to perform the following:
+// - Clone your GitHub repository
+// - Build the code with 'mvn clean package'
+// - Build a Docker image from the WAR file
+// - Run a Docker container
 
 ## Sample Jenkinsfile1
 
-```python
+```
 pipeline {
-    agent { label 'Agent1' }  // Replace 'wsl-agent' with the label of your agent
+    agent { label 'Agent1' }  // Use your Jenkins agent label
 
     environment {
         GITHUB_REPO_URL = 'https://github.com/florayuyuun123/Jenkins-pipeline-project.git'
-        BRANCH_NAME = 'main'  // Replace with your branch name if it's not 'main'
-        CREDENTIALS_ID = 'jenkins-github-creds'  // Replace with your Jenkins credentials ID
+        BRANCH_NAME = 'main'  // Set to your branch
+        CREDENTIALS_ID = 'jenkins-github-creds'  // Your GitHub credentials in Jenkins
+        IMAGE_NAME = 'flo-movies-image'  // Name for the Docker image
+        CONTAINER_NAME = 'flo-movies-new'  // Name for the running container
     }
 
     stages {
-        stage('Agent Details') {
-            steps {
-                echo "Running on agent: ${env.NODE_NAME}"
-                sh 'uname -a'  // Print system information
-                sh 'whoami'    // Print the current user
-            }
-        }
-
         stage('Clone Repository') {
             steps {
-                git branch: "${env.BRANCH_NAME}", url: "${env.GITHUB_REPO_URL}", credentialsId: "${env.CREDENTIALS_ID}"
+                cleanWs()  // Ensure a clean workspace
+                git branch: "${env.BRANCH_NAME}", 
+                    url: "${env.GITHUB_REPO_URL}", 
+                    credentialsId: "${env.CREDENTIALS_ID}"
             }
         }
 
-        stage('Build') {
+        stage('Check for pom.xml') {
             steps {
-                sh 'mvn clean package'  // Simple Maven build
+                sh 'ls -la'  // List files to verify repo cloned correctly
+                sh 'find . -name "pom.xml"'  // Ensure pom.xml exists
             }
         }
 
-        stage('Docker Build') {
+        stage('Build with Maven') {
             steps {
-                script {
-                    sh 'docker --version'  // Verify Docker installation
-                    sh 'docker build -t flo-movies-image .'  // Build Docker image
-                }
+                sh 'mvn clean package'  // Compile and package the app
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker build -t ${IMAGE_NAME} .'  // Uses the external Dockerfile
             }
         }
 
         stage('Run Docker Container') {
             steps {
                 script {
-                    sh 'docker run --name flo-movies-new --rm -d -p 8008:8080 flo-movies-image'  // Run Docker container in detached mode
+                    sh 'docker run --name ${CONTAINER_NAME} --rm -d -p 8008:8080 ${IMAGE_NAME}'  // Run container in detached mode
                 }
             }
         }
@@ -60,37 +60,17 @@ pipeline {
 
     post {
         always {
-            echo 'Cleaning up Docker containers and images...'
-            sh 'docker rm $(docker ps -a -q) || true'
-            sh 'docker rmi $(docker images -q) || true'
+            echo 'Cleaning up old Docker containers and images...'
+            sh 'docker ps -aq | xargs docker rm || true'  // Remove stopped containers
+            sh 'docker images -q | xargs docker rmi || true'  // Remove old images
         }
         success {
-            echo 'Pipeline completed successfully!'
+            echo '✅ Pipeline completed successfully!'
         }
         failure {
-            echo 'Pipeline failed!'
+            echo '❌ Pipeline failed!'
         }
     }
 }
-```
 
-## Sample Dockerfile
-
-```python
-# Use the official Tomcat 9 image as the base image
-FROM tomcat:9-jdk11-openjdk
-
-# Remove the default web applications deployed with Tomcat
-RUN rm -rf /usr/local/tomcat/webapps/*
-
-# Copy the WAR file into the webapps directory of Tomcat
-# Replace 'your-app.war' with the name of your WAR file
-COPY target/*.war /usr/local/tomcat/webapps/ROOT.war
-
-
-# Expose port 8080 for the Tomcat server
-EXPOSE 8080
-
-# Start Tomcat server
-CMD ["catalina.sh", "run"]
 ```

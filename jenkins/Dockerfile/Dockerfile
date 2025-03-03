@@ -1,20 +1,19 @@
 ## Sample Dockerfile
 
-```python
-# Use the official Tomcat 9 image as the base image
+```
+# Use the official Tomcat 9 base image
 FROM tomcat:9-jdk11-openjdk
 
-# Remove the default web applications deployed with Tomcat
+# Remove default web applications
 RUN rm -rf /usr/local/tomcat/webapps/*
 
-# Copy the WAR file into the webapps directory of Tomcat
-# Replace 'your-app.war' with the name of your WAR file
+# Copy the built WAR file into the Tomcat webapps directory
 COPY target/*.war /usr/local/tomcat/webapps/ROOT.war
 
-
-# Expose port 8080 for the Tomcat server
+# Expose port 8080 for external access
 EXPOSE 8080
 
 # Start Tomcat server
 CMD ["catalina.sh", "run"]
+
 ```
