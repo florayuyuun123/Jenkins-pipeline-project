@@ -18,6 +18,7 @@ pipeline {
         CREDENTIALS_ID = 'jenkins-github-creds'  // Your GitHub credentials in Jenkins
         IMAGE_NAME = 'flo-movies-image'  // Name for the Docker image
         CONTAINER_NAME = 'flo-movies-new'  // Name for the running container
+        DOCKERFILE_DIR = 'flo-tech/github/jenkins-projct'  // Path to the directory containing Dockerfile (relative to workspace)
     }
 
     stages {
@@ -30,10 +31,11 @@ pipeline {
             }
         }
 
-        stage('Check for pom.xml') {
+        stage('Check for Required Files') {
             steps {
                 sh 'ls -la'  // List files to verify repo cloned correctly
                 sh 'find . -name "pom.xml"'  // Ensure pom.xml exists
+                sh 'find . -name "Dockerfile"'  // Ensure Dockerfile exists
             }
         }
 
@@ -43,9 +45,19 @@ pipeline {
             }
         }
 
-        stage('Build Docker Image') {
+        stage('Build Docker Image') { 
             steps {
-                sh 'docker build -t ${IMAGE_NAME} .'  // Uses the external Dockerfile
+                sh '''
+                export DOCKER_BUILDKIT=1  # Enable BuildKit
+                export PATH=$PATH:/usr/local/bin
+                export DOCKER_HOST=unix:///var/run/docker.sock  # Ensure correct Docker daemon
+
+                docker buildx create --name mybuilder --driver docker-container || true  # Fix: Use correct buildx creation command
+                docker buildx use mybuilder
+                docker buildx inspect --bootstrap
+
+                docker buildx build --tag ${IMAGE_NAME} --file ${DOCKERFILE_DIR}/Dockerfile ${DOCKERFILE_DIR}  # Corrected path to Dockerfile
+                '''
             }
         }
 
