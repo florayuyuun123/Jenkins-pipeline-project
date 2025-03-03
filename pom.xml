@@ -9,18 +9,15 @@
     <packaging>war</packaging>
 
     <name>Flo Movies Web App</name>
-    <description>A simple Java web application deployed via Jenkins & Docker</description>
+    <description>A simple Java web application deployed via Jenkins &amp; Docker</description>  <!-- FIXED -->
 
-    <!-- Java Version -->
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <failOnMissingWebXml>false</failOnMissingWebXml>
     </properties>
 
-    <!-- Dependencies -->
     <dependencies>
-        <!-- Servlet API for Web Applications -->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
@@ -28,7 +25,6 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- JUnit for Testing -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -37,11 +33,9 @@
         </dependency>
     </dependencies>
 
-    <!-- Build Configuration -->
     <build>
-        <finalName>flo-movies</finalName>  <!-- Output WAR file will be flo-movies.war -->
+        <finalName>flo-movies</finalName>
         <plugins>
-            <!-- Compiler Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -52,7 +46,6 @@
                 </configuration>
             </plugin>
 
-            <!-- WAR Plugin for Packaging -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
@@ -64,7 +57,6 @@
         </plugins>
     </build>
 
-    <!-- Repositories (If needed) -->
     <repositories>
         <repository>
             <id>central</id>
